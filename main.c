@@ -3,12 +3,11 @@
 #include <string.h>
 
 typedef struct{
-	unsigned char r,g,b; //struct dos pixels em RGB;
+	unsigned char r,g,b; 
 }pixel;
 
 int main(){
-	git remote add origin https://github.com/RafaeloXIII/1.git
-git push -u origin master
+
 	FILE *image;
 	FILE *newImage;
 
@@ -16,10 +15,10 @@ git push -u origin master
 	char key[5];
 	int i,j, larg, alt, max;
 
-	image = fopen("02.ppm", "rb");
+	image = fopen("01.ppm", "rb");
 	if(image == NULL)
 	{
-		printf("Erro na abertura do arquivo \n");
+		printf("Arquivo nao abriu :( \n");
 		return 0;
 	}
 
@@ -28,7 +27,7 @@ git push -u origin master
 
 
 	fscanf(image, "%d %d\n%d\n", &larg, &alt, &max);
-	printf("larg =%d alt=%d key=%s max=%d\n",larg, alt, key,max );
+	printf("larg =%d alt=%d max=%d\n",larg, alt,max );
 
 	newImage = fopen("arquivo.txt","wb+"); 
 	if(newImage == NULL){
@@ -49,18 +48,37 @@ git push -u origin master
 			fscanf(image, "%c", &RGB[i][j].g );
 		
 			fscanf(image, "%c", &RGB[i][j].b );
-			if((RGB[i][j].r == 255)&&( RGB[i][j].g == 255)&&( RGB[i][j].b == 255)){
-		   	printf(" ");
-		   }
-		   else{
-		   	printf("/");
-		   }
-			
+		
 		}
 	}
+	for(i=0; i<larg;i++){ 
+		for(j=0;j<alt;j++){
+			
+		if((RGB[i][j].r == 255)&&( RGB[i][j].g == 255)&&( RGB[i][j].b == 255)){
+			if(j == larg-1){
+				printf(" \n");
+			}
+			else{
+			
+		   	printf(" ");
+		    }
+		    }
+		else{
+				if(j == larg-1){
+				printf("|\n");
+			}
+			else{
+			
+		   	printf("|");
+		    }
+		    }
+			
+	    }
+	}
+	
 	
 
-	fprintf(newImage, "P6\n%d %d\n%d\n",larg,alt,max);
+	fprintf(newImage, "P6\n %d %d \n %d \n",larg,alt,max);
 	for(i=0;i<larg;i++){
 		for(j=0;j<alt; j++){
 			fprintf(newImage, "%c%c%c", RGB[i][j].r, RGB[i][j].g, RGB[i][j].b );
