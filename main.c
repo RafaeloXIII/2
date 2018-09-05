@@ -3,7 +3,7 @@
 #include <string.h>
 #define MAXI 10000
 typedef struct{
-	char Item[MAXI];
+	int Item[MAXI];
 	int top;
 }pilha;
  
@@ -21,7 +21,7 @@ int pilha_vazia (pilha *p)
     else
      return 0;
 }
-void push (pilha *p , char x){
+void push (pilha *p , int x){
 	p->top++;
 	p->Item[p->top] = x ;
 }
@@ -42,12 +42,15 @@ typedef struct{
 }pixel;
 
 int main(){
+	int k;
+	int obj = 0;
+	unsigned char r0, g0, b0;
+	int** dados;
 	pilha *p = (pilha*)malloc(sizeof(pilha));
 	i_pilha(p);
 
 	FILE *image;
 	FILE *newImage;
-
 
 	char key[5];
 	int i,j, larg, alt, max;
@@ -77,23 +80,37 @@ int main(){
 		RGB[i] = (pixel*)malloc(alt*sizeof(pixel));
 
 	}
+		
+		dados = (int**)malloc(alt*sizeof(int*));
+	for(i=0;i<alt;i++){						
+		dados[i] = (int*)malloc(larg*sizeof(int));
+		for(j = 0; j<larg; j++ ){
+		dados[i][j];
+		}
+   }
 
 	for(i=0; i<larg;i++){ 
 		for(j=0;j<alt;j++){
 			fscanf(image, "%c", &RGB[i][j].r );
-			push(p , &RGB[i][j].r);
+			
             fscanf(image, "%c", &RGB[i][j].g );
-            push(p , &RGB[i][j].r);
+            
 	       	fscanf(image, "%c", &RGB[i][j].b );
-	       	push(p , &RGB[i][j].r);
+	       	
 		}
 	}
+		r0 = RGB[0][0].r ;
+			g0 = RGB[0][0].g ;
+            b0 = RGB[0][0].b ; 
 	for(i=0; i<larg;i++){ 
 		for(j=0;j<alt;j++){
-			
-		if((RGB[i][j].r == RGB[1][1].r)&&( RGB[i][j].g == RGB[1][1].g)&&( RGB[i][j].b == RGB[1][1].b)){
-			if(j == larg-1){
+				
+		if((RGB[i][j].r == r0)&&( RGB[i][j].g == g0)&&( RGB[i][j].b ==b0)){
+			dados[i][j] = 0;
+ 		if(j == larg-1){
+				
 				printf(" \n");
+				
 			}
 			else{
 			
@@ -101,6 +118,7 @@ int main(){
 		    }
 		    }
 		else{
+			 dados[i][j] = 1;
 				if(j == larg-1){
 				printf("|\n");
 			}
@@ -112,7 +130,45 @@ int main(){
 			
 	    }
 	}
-	
+	for(i=0; i<alt;i++){ 
+		for(j=0;j<larg;j++){
+			if(dados[i][j] == 1){
+				dados[i][j] == 3;
+				while(1){
+					if(dados[i+1][j] == 1){
+						dados[i+1][j] = 3;
+						push(p , dados[i+1][j]);
+					}
+					if(dados[i-1][j] == 1){
+						dados[i-1][j] = 3;
+						push(p , dados[i-1][j]);
+					}
+					if(dados[i][j+1] == 1){
+						dados[i][j+1] = 3;
+						push(p , dados[i][j+1]);
+					}
+					if(dados[i][j-1] == 1){
+						dados[i][j-1] = 3;
+						push(p , dados[i][j-1]);
+					}
+				k = pilha_vazia(p);
+					if(k == 0){
+						pop(p);
+						k = pilha_vazia(p);
+					}
+					else{
+						break;
+					}
+				}
+				
+				
+			
+			 
+			}
+				   
+		 }
+		}
+	printf("%d", obj);
 	
 
 	fprintf(newImage, "P6\n %d %d \n %d \n",larg,alt,max);
